@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.27)
 message(STATUS "CMake version is ${CMAKE_VERSION}")
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
   message(FATAL_ERROR "In-source builds are not allowed")
 endif()
+
+project(advents_of_code CXX)
 
 # Default to `release` build if nothing was specified
 # if(NOT CMAKE_BUILD_TYPE)
@@ -50,12 +52,22 @@ target_compile_options(compiler_props
         # $<$<CXX_COMPILER_ID:MSVC>:/W3 /WX /wd4668>) # 3rd level warning and higher, Werror
 )
 
+include(GoogleTest)
+
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
 
 macro(add_day_project my_prj)
     project(${my_prj} CXX)
     add_executable(${PROJECT_NAME} ${my_prj}.cpp)
     message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
-    message(STATUS "CMAKE_CURRENT_LIST_DIR = ${CMAKE_CURRENT_LIST_DIR}")
 
     if(MSVC)
         message(STATUS "MSVC compiler")
@@ -66,6 +78,17 @@ macro(add_day_project my_prj)
     target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
     target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
+    target_link_libraries(${PROJECT_NAME} GTest::gtest_main)
+    
+    gtest_discover_tests(${PROJECT_NAME})
+
 endmacro()
 
-add_day_project(day1)
+##### End configurating. Add projects #####
+enable_testing()
+
+file (GLOB SRC_FILES ${CMAKE_CURRENT_LIST_DIR}/*.cpp)
+foreach(SRC ${SRC_FILES})
+    get_filename_component(FILE_NAME_WE ${SRC} NAME_WE)
+    add_day_project(${FILE_NAME_WE})
+endforeach()
