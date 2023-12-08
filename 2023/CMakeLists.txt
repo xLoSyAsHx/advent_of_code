@@ -63,32 +63,32 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-
-macro(add_day_project my_prj)
-    project(${my_prj} CXX)
-    add_executable(${PROJECT_NAME} ${my_prj}.cpp)
-    message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
-
+macro(target_configure name)
     if(MSVC)
         message(STATUS "MSVC compiler")
-        target_compile_options(${PROJECT_NAME} PUBLIC "/ZI")
-        target_link_options(${PROJECT_NAME} PUBLIC "/INCREMENTAL")
+        target_compile_options(${name} PUBLIC "/ZI")
+        target_link_options(${name} PUBLIC "/INCREMENTAL")
     endif()
-    
-    target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
-    target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
-    target_link_libraries(${PROJECT_NAME} GTest::gtest_main)
-    
-    gtest_discover_tests(${PROJECT_NAME})
+    target_compile_features(${name} PUBLIC cxx_std_23)
+    target_include_directories(${name} PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
+    target_link_libraries(${name} GTest::gtest_main)
+    gtest_discover_tests(${name})
+endmacro()
+
+macro(add_day_project name)
+    project(${name} CXX)
+    add_executable(${PROJECT_NAME} ${name}.cpp)
+    message(STATUS "PROJECT_NAME = ${PROJECT_NAME}")
+    target_configure(${PROJECT_NAME})
 endmacro()
 
 ##### End configurating. Add projects #####
 enable_testing()
 
 file (GLOB SRC_FILES ${CMAKE_CURRENT_LIST_DIR}/*.cpp)
-foreach(SRC ${SRC_FILES})
-    get_filename_component(FILE_NAME_WE ${SRC} NAME_WE)
-    add_day_project(${FILE_NAME_WE})
-endforeach()
+add_executable(${PROJECT_NAME} ${SRC_FILES})
+
+target_configure(${PROJECT_NAME})
+target_compile_definitions(${PROJECT_NAME} PUBLIC DATA_FILES_PATH="${CMAKE_CURRENT_LIST_DIR}/inputs/")

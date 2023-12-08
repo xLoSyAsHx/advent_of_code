@@ -1,4 +1,5 @@
-#include <iostream>
+#include "common.h"
+
 #include <string>
 #include <locale>
 #include <codecvt>
@@ -10,11 +11,7 @@
 #include <unordered_set>
 #include <functional>
 
-#include <gtest/gtest.h>
-
-#include "day1_input.h"
-
-std::string input_test =
+std::string d1_input_test =
 "two1nine\n"
 "eightwothree\n"
 "abcone2threexyz\n"
@@ -23,25 +20,28 @@ std::string input_test =
 "zoneight234\n"
 "7pqrstsixteen";
 
-namespace ranges = std::ranges;
-namespace views = std::ranges::views;
-#define GTEST_COUT std::cerr << "[          ] [ INFO ]"
 
 TEST(AdventOfCode_2023, Day1_1) {
+    std::string input;
+    read_input(input);
+
     int sum = 0;
     auto isdigit = [](char c) { return std::isdigit(static_cast<unsigned char>(c)); };
-    for (std::string_view s : views::split(day1_input, '\n')) {
+    for (std::string_view s : views::split(input, '\n')) {
         //std::cout << std::format("s = {}\n", s);
         int v1 = *std::find_if(s.begin(), s.end(), isdigit) - '0';
         int v2 = *std::find_if(s.rbegin(), s.rend(), isdigit) - '0';
         sum += v1 * 10 + v2;
     }
 
-    GTEST_COUT << "Day1.1 answer " << sum << std::endl;
+    GTEST_COUT << "answer is " << sum << std::endl;
     EXPECT_EQ(sum, 53'921);
 }
 
 TEST(AdventOfCode_2023, Day1_2) {
+    std::string input;
+    read_input(input);
+
     int sum = 0;
     std::array<std::string, 9> substrings = {
         "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
@@ -53,7 +53,7 @@ TEST(AdventOfCode_2023, Day1_2) {
         substrings | views::transform([](auto&& r) { return r[0]; }),
         [&first_subs_ch](char c){ first_subs_ch.insert(c); });
 
-    for (auto&& s : views::split(day1_input, '\n'))
+    for (auto&& s : views::split(input, '\n'))
     {
         for (int i = 0; i < ranges::size(s); ++i) {
             if (!first_subs_ch.contains(s[i]))
@@ -76,6 +76,6 @@ TEST(AdventOfCode_2023, Day1_2) {
         //std::cout << std::format("v1 = {}  v2 = {}\n", v1, v2);
     }
 
-    GTEST_COUT << "Day1.2 answer " << sum << std::endl;
+    GTEST_COUT << "answer is " << sum << std::endl;
     EXPECT_EQ(sum, 54676);
 }
