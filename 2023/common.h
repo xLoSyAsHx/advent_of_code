@@ -4,6 +4,8 @@
 
 #include <fstream>
 #include <ranges>
+#include <algorithm>
+#include <numeric>
 #include <filesystem>
 #include <string>
 
