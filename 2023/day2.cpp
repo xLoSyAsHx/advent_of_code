@@ -18,7 +18,7 @@ TEST(AdventOfCode_2023, Day2_1) {
     std::string input;
     read_input(input);
 
-    auto [e_beg, e_end] = ranges::remove_if(input, [](auto c) { return c == ',' || c == ';'; });
+    auto [e_beg, e_end] = rng::remove_if(input, [](auto c) { return c == ',' || c == ';'; });
     input.erase(e_beg, e_end);
 
     for (std::string_view line : input | views::split('\n'))
@@ -65,7 +65,7 @@ TEST(AdventOfCode_2023, Day2_2) {
     std::string input;
     read_input(input);
 
-    auto [e_beg, e_end] = ranges::remove_if(input, [](auto c) { return c == ',' || c == ';'; });
+    auto [e_beg, e_end] = rng::remove_if(input, [](auto c) { return c == ',' || c == ';'; });
     input.erase(e_beg, e_end);
 
     int r{}, g{}, b{};

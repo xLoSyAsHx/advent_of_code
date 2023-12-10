@@ -47,15 +47,15 @@ TEST(AdventOfCode_2023, Day1_2) {
         "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
     };
 
-    // Starting from C++23: std::unordered_set<char> unique_chars = substrings | views::transform([](auto&& r) { return r[0]; }) | ranges::to<std::unordered_set<char>>;
+    // Starting from C++23: std::unordered_set<char> unique_chars = substrings | views::transform([](auto&& r) { return r[0]; }) | rng::to<std::unordered_set<char>>;
     std::unordered_set<char> first_subs_ch;
-    ranges::for_each(
+    rng::for_each(
         substrings | views::transform([](auto&& r) { return r[0]; }),
         [&first_subs_ch](char c){ first_subs_ch.insert(c); });
 
     for (auto&& s : views::split(input, '\n'))
     {
-        for (int i = 0; i < ranges::size(s); ++i) {
+        for (int i = 0; i < rng::size(s); ++i) {
             if (!first_subs_ch.contains(s[i]))
                 continue;
 

@@ -10,7 +10,7 @@
 #include <string>
 
 
-namespace ranges = std::ranges;
+namespace rng = std::ranges;
 namespace views = std::ranges::views;
 #define GTEST_COUT std::cerr << "[          ] "
 #define GTEST_TEST_NAME ::testing::UnitTest::GetInstance()->current_test_info()->name()
