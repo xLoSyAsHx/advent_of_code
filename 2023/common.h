@@ -17,8 +17,8 @@ namespace views = std::ranges::views;
 
 static void read_input(std::string& s)
 {
-    std::string test_name{ GTEST_TEST_NAME };
-    test_name = test_name.substr(0, test_name.size() - 2);
+    std::string test_name = GTEST_TEST_NAME;
+    test_name = test_name.substr(0, test_name.find_first_of('_'));
 
     std::ifstream f(DATA_FILES_PATH + test_name + "_input.txt", std::ios::ate);
     EXPECT_TRUE(f.is_open());
